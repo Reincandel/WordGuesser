@@ -1,0 +1,97 @@
+import java.util.Scanner;
+import javax.swing.*;
+
+public class PlayGame {
+    public static int gamesWon = 0;
+    public static int gamesLost = 0;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        JLabel label = new JLabel("WELCOME TO HANGMAN");
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        JOptionPane.showMessageDialog(null, label, "Start box", JOptionPane.PLAIN_MESSAGE);
+
+        boolean isPlayGame = true;
+
+        do {
+            Hangman aGame = new Hangman();
+            processGuesses(aGame);
+            determineWinner(aGame);
+            System.out.println("Would you like to play again? (Y/N): ");
+            String choice = scanner.nextLine();
+
+            if (choice.compareToIgnoreCase("Y") == 0) {
+                isPlayGame = true;
+            } else if (choice.compareToIgnoreCase("N") == 0) {
+                isPlayGame = false;
+            } else {
+                System.out.println("INVALID");
+                System.out.println("Only input Y/N" + "\n");
+            }
+            System.out.println("\n" + aGame.toString() + "\n");
+        } while (isPlayGame);
+
+        summarize();
+    }
+
+    public static void determineWinner(Hangman aGame) {
+
+        if (aGame.getSecretWord().compareToIgnoreCase(aGame.getUserGuess()) == 0) {
+            gamesWon++;
+        } else {
+            gamesLost++;
+
+        }
+
+    }
+
+    public static void processGuesses(Hangman aGame) {
+        Scanner scnr = new Scanner(System.in);
+
+        int secretWordLength = aGame.getSecretWord().length();
+        int chances = 3 * secretWordLength;
+        int usedChances = 0;
+        int loc;
+        while (usedChances < chances && !(aGame.getSecretWord().equalsIgnoreCase(aGame.getUserGuess()))) {
+            usedChances++;
+
+            System.out.print("Input a letter: ");
+
+            char ch = scnr.next().charAt(0);
+            ch = Character.toLowerCase(ch);
+
+            loc = -1;
+
+            String userGuess = "";
+            do {
+
+                loc = aGame.getSecretWord().indexOf(ch, loc + 1);
+
+                if (loc != -1) {
+                    userGuess = aGame.getUserGuess();
+                    userGuess = userGuess.substring(0, loc) + ch + userGuess.substring(loc + 1);
+                    aGame.setUserGuess(userGuess);
+                }
+            }
+            while (loc != -1);
+
+            System.out.println("User Guess : " + userGuess);
+            chances = chances - 1;
+            System.out.println("Chances left: " + chances);
+            System.out.println("Used Chances: " + usedChances + "\n");
+
+        }
+
+    }
+
+    public static void summarize() {
+        System.out.println("You won: " + gamesWon + " times");
+        JOptionPane.showMessageDialog(null, "You won: " +
+                gamesWon + " times", "End box", JOptionPane.PLAIN_MESSAGE);
+
+        System.out.println("You lost: " + gamesLost + " times");
+        JOptionPane.showMessageDialog(null, "You lost: " +
+                gamesLost + " times", "End box", JOptionPane.PLAIN_MESSAGE);
+    }
+}
