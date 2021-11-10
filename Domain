@@ -1,0 +1,51 @@
+import java.util.Random;
+
+public class Hangman {
+    private String secretWord;
+    private String userGuess = "";
+
+
+    public Hangman() {
+        Random random = new Random();
+        int rndChoice = Math.abs(random.nextInt(5));
+        if (rndChoice == 0) {
+            this.secretWord = "computer";
+        } else if (rndChoice == 1) {
+            this.secretWord = "basketball";
+        } else if (rndChoice == 2) {
+            this.secretWord = "keyboard";
+        } else if (rndChoice == 3) {
+            this.secretWord = "playstation";
+        } else if (rndChoice == 4) {
+            this.secretWord = "programming";
+        }
+
+        int wordLength = this.secretWord.length();
+        int i = 0;
+        while (i < wordLength) {
+            i++;
+            this.userGuess = this.getUserGuess() + "_";
+        }
+    }
+
+    public String getSecretWord() {
+        return secretWord;
+    }
+
+    public void setSecretWord(String secretWord) {
+        this.secretWord = secretWord;
+    }
+
+    public String getUserGuess() {
+        return userGuess;
+    }
+
+    public void setUserGuess(String userGuess) {
+        this.userGuess = userGuess;
+    }
+
+    @Override
+    public String toString() {
+        return "The secret word is: " + this.secretWord + "\n" + "User guessed word: " + this.userGuess;
+    }
+}
